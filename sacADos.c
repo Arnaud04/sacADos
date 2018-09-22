@@ -72,14 +72,55 @@ void lectureFichier(Objet *objet, double *poidMax,int *nbObjets)
 	*nbObjets = line;
 }
 
+void calculRate(Objet *objet, int nbObjets)
+{
+	int i;
+	for(i=0; i<nbObjets; i++)
+	{
+		objet[i].ratios = (objet[i].poids)/(objet[i].valeur);
+	}
+}
+
 void afficheDonnees(Objet *objet,int nbObjets)
 {
 	int i=0;
 	
 	for(i=0; i<nbObjets; i++)
 	{
-		printf("val : %f  poids : %f\n",objet[i].valeur,objet[i].poids);
+		printf("objet[%d] => valeur : %f poids : %f, ratio : %f\n",i,objet[i].valeur,objet[i].poids,objet[i].ratios);
 	}
+	printf("\n");
+}
+
+void quickSort(Objet *objet,int nbObjets)
+{
+	
+}
+
+void trieABulles(Objet *objet, int nbObjets)
+{
+	int i,j,k=nbObjets-1;
+	int count =0;
+	Objet tmp;
+	
+	for(i=0; i<nbObjets-1; i++)
+	{
+		for(j=0; j<k; j++)
+		{
+			count ++;
+			if(objet[j].ratios > objet[j+1].ratios)
+			{
+				tmp = objet[j];
+				objet[j] = objet[j+1];
+				objet[j+1] = tmp;
+				
+			}
+
+		}
+		
+		k--;
+	}
+	printf("il y a %d coup pour trier le tableau",count);
 }
 
 int main(int argc, char * argv[])
@@ -90,8 +131,12 @@ int main(int argc, char * argv[])
 	
 	lectureFichier(objet,&poidMax,&nbObjets);
 	
+	calculRate(objet,nbObjets);
+	
 	afficheDonnees(objet,nbObjets);
 	
+	trieABulles(objet,nbObjets);
+	afficheDonnees(objet,nbObjets);
 	printf("Voici le poids max : %f\n",poidMax);
 	printf("Voici le nombre d'objet %d\n",nbObjets);
 
