@@ -12,7 +12,11 @@ struct Objet{
 
 int isPair(int number);
 void lectureFichier(Objet *objet, double *poidMax,int *nbObjets);
+void calculRate(Objet *objet, int nbObjets);
 void afficheDonnees(Objet *objet,int nbObjets);
+void quickSort(Objet *objet,int nbObjets);
+void trieABulles(Objet *objet, int nbObjets);
+
 
 
 #endif  

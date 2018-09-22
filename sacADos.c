@@ -91,12 +91,45 @@ void afficheDonnees(Objet *objet,int nbObjets)
 	}
 	printf("\n");
 }
-
+//QuickSort ne fonctionne pas encore
+/* 
 void quickSort(Objet *objet,int nbObjets)
 {
+	int mur,courant;
+	double pivot;
+	Objet tmp;
 	
-}
+	if(nbObjets < 2)
+		return;
+	pivot = objet[nbObjets - 1].ratios;
+	mur = courant = 0;
+	while (courant < nbObjets)
+	{
+		if(objet[courant].ratios <= pivot)
+		{
+			if(mur != courant)
+			{
+				tmp = objet[courant];
+				objet[courant] = objet[mur];
+				objet[mur] = tmp;
+			}
+			mur ++;
+		}
+		courant ++;
+	}
+	quickSort(objet,mur-1);
+	quickSort(objet+mur-1, nbObjets - mur +1);
+	
+	
+}*/ 
+void swap(Objet obj1, Objet obj2)
+{
+		Objet tmp;
+		tmp = obj1;
+		obj1 = obj2;
+		obj2 = tmp;
 
+}
 void trieABulles(Objet *objet, int nbObjets)
 {
 	int i,j,k=nbObjets-1;
@@ -120,7 +153,7 @@ void trieABulles(Objet *objet, int nbObjets)
 		
 		k--;
 	}
-	printf("il y a %d coup pour trier le tableau",count);
+	printf("trie fait en %d cout",count);
 }
 
 int main(int argc, char * argv[])
@@ -128,15 +161,13 @@ int main(int argc, char * argv[])
 	Objet objet[SIZE];
 	double poidMax = 0;
 	int nbObjets = 0;
-	
 	lectureFichier(objet,&poidMax,&nbObjets);
 	
 	calculRate(objet,nbObjets);
 	
-	afficheDonnees(objet,nbObjets);
-	
 	trieABulles(objet,nbObjets);
 	afficheDonnees(objet,nbObjets);
+	
 	printf("Voici le poids max : %f\n",poidMax);
 	printf("Voici le nombre d'objet %d\n",nbObjets);
 
