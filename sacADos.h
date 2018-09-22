@@ -10,6 +10,9 @@ struct Objet{
 	double ratios;
 };
 
-void lectureFichier();
+int isPair(int number);
+void lectureFichier(Objet *objet, double *poidMax,int *nbObjets);
+void afficheDonnees(Objet *objet,int nbObjets);
+
 
 #endif  

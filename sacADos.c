@@ -14,12 +14,11 @@ int isPair(int number)
 	return resultat; //1 si il est pair 0 sinon 
 }
 
-void lectureFichier(Objet *objet, double *poidMax,int *nbline)
+void lectureFichier(Objet *objet, double *poidMax,int *nbObjets)
 {
 	
 	FILE *fichier = NULL;
 	fichier = fopen("sac.txt","r+");
-	char tmp[SIZE];
 	
 	if (fichier == NULL)
 	{
@@ -27,20 +26,20 @@ void lectureFichier(Objet *objet, double *poidMax,int *nbline)
 		exit(1);
 	}
 	
-	int currentChar = 0;
-	int indice = 0;
-	int colonne = 0;
-	int line = 0;
-	double number = 0;
-	
+	char tmp[SIZE];
 	fgets(tmp,LINE,fichier);
 	*poidMax = strtod(tmp,NULL);
-
-
+	
+	int currentChar = 0;
+	
+	int indice = 0;
+	double number = 0;
+	int colonne = 0;
+	int line = 0;
+	
 	while(currentChar != EOF)
 	{
 		currentChar = fgetc(fichier);
-		
 		if((currentChar != ' ') && (currentChar != '\n')) //lecture [a-z,A-Z,1-9]
 		{
 			tmp[indice] = currentChar;
@@ -68,12 +67,16 @@ void lectureFichier(Objet *objet, double *poidMax,int *nbline)
 				line ++;
 			
 		}
-
 	}
-	*nbline = line;
-	//printf("voici le poids maximal %f\n",poidMaximal);
+		
+	*nbObjets = line;
+}
+
+void afficheDonnees(Objet *objet,int nbObjets)
+{
 	int i=0;
-	for(i=0;i<line;i++)
+	
+	for(i=0; i<nbObjets; i++)
 	{
 		printf("val : %f  poids : %f\n",objet[i].valeur,objet[i].poids);
 	}
@@ -83,11 +86,14 @@ int main(int argc, char * argv[])
 {
 	Objet objet[SIZE];
 	double poidMax = 0;
-	int nbligne = 0;
+	int nbObjets = 0;
 	
-	lectureFichier(objet,&poidMax,&nbligne);
+	lectureFichier(objet,&poidMax,&nbObjets);
 	
+	afficheDonnees(objet,nbObjets);
 	
-	
+	printf("Voici le poids max : %f\n",poidMax);
+	printf("Voici le nombre d'objet %d\n",nbObjets);
+
 	return 0;
 }
