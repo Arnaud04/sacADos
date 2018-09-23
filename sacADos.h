@@ -14,6 +14,7 @@ typedef struct Arbre Arbre;
 struct Arbre{
 	Objet noeud[SIZE];
 	int visite[SIZE];
+	int choix[SIZE];
 	int filsGauche;
 	int filsDroit;
 };
@@ -24,6 +25,7 @@ void calculRate(Objet *objet, int nbObjets);
 void afficheDonnees(Objet *objet,int nbObjets);
 void quickSort(Objet *objet,int nbObjets);
 void trieABulles(Objet *objet, int nbObjets);
+//void initialiserTableau(Arbre collectionObjet, int nbObjets);
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax);
 
 #endif  

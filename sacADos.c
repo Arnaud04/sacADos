@@ -156,34 +156,64 @@ void trieABulles(Objet *objet, int nbObjets)
 	}
 	printf("trie fait en %d cout\n",count);
 }
-
+/*
 void initialiserTableau(Arbre collectionObjet, int nbObjets)
 {
 	int i=0;
 	
 	for(i=0; i<nbObjets; i++)
 	{
+		collectionObjet.choix[i] = 0;
 		collectionObjet.visite[i] = 0;
 	}
 }
-
+*/
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
 {
 	int i,j;
-	int SommePoids = 0;
+	double SommePoids = 0;
 	for(i=0;i<nbObjets; i++) //copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
 		collectionObjet.noeud[i] = objet[i];
 		
-	initialiserTableau(collectionObjet, nbObjets);
-		
+	//initialiserTableau a 0 les tableaux choix et visite
+	
+	for(i=0; i<nbObjets; i++)
+	{
+		collectionObjet.choix[i] = 0;
+		collectionObjet.visite[i] = 0;
+	}
+
+	//on met la première case à 1 pour pouvoir commencer l'ago
+	collectionObjet.visite[0] = 1;
+	
 	for(j=0;j<nbObjets;j++)
 	{
-		SommePoids += collectionObjet.noeud[i].poids;
-		if(SommePoids < poidMax)
+		if(collectionObjet.visite[j] == 1)
 		{
-			//collectionObjet.visite[i]
+			SommePoids += collectionObjet.noeud[j].poids;
+			if(SommePoids < poidMax)
+			{
+
+				printf("somme %.3f\n",SommePoids);
+				
+				collectionObjet.filsGauche = 2*j;
+				collectionObjet.filsDroit = (2*j)+1;
+				collectionObjet.choix[j] = 1;
+				collectionObjet.visite[collectionObjet.filsGauche] = 1;
+				collectionObjet.visite[collectionObjet.filsDroit] = 1;
+			}
+			
 		}
 	}
+	
+		
+	for(i=0; i<nbObjets;i++)
+	{
+		printf("objet %d -> :%d \n",i,collectionObjet.choix[i]);
+		
+	}
+	
+	printf("\n");
 }
 
 int main(int argc, char * argv[])
