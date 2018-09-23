@@ -91,6 +91,7 @@ void afficheDonnees(Objet *objet,int nbObjets)
 	}
 	printf("\n");
 }
+
 //QuickSort ne fonctionne pas encore
 /* 
 void quickSort(Objet *objet,int nbObjets)
@@ -153,20 +154,33 @@ void trieABulles(Objet *objet, int nbObjets)
 		
 		k--;
 	}
-	printf("trie fait en %d cout",count);
+	printf("trie fait en %d cout\n",count);
+}
+
+void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets)
+{
+	int i;
+	for(i=0;i<nbObjets; i++) //copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
+		collectionObjet.noeud[i] = objet[i];
+		
+	printf("valeur de l'objet 1 %f ",collectionObjet.noeud[1].valeur);
 }
 
 int main(int argc, char * argv[])
 {
 	Objet objet[SIZE];
+	Arbre collectionObjet;
+	
 	double poidMax = 0;
 	int nbObjets = 0;
+	
 	lectureFichier(objet,&poidMax,&nbObjets);
 	
 	calculRate(objet,nbObjets);
 	
 	trieABulles(objet,nbObjets);
 	afficheDonnees(objet,nbObjets);
+	branchAndBound(collectionObjet, objet, nbObjets);
 	
 	printf("Voici le poids max : %f\n",poidMax);
 	printf("Voici le nombre d'objet %d\n",nbObjets);
