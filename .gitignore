@@ -1,2 +1,3 @@
-sacADos.c
-* .out
+#Unignore all with extensions
+
+!*.*
