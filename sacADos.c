@@ -157,13 +157,33 @@ void trieABulles(Objet *objet, int nbObjets)
 	printf("trie fait en %d cout\n",count);
 }
 
-void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets)
+void initialiserTableau(Arbre collectionObjet, int nbObjets)
 {
-	int i;
+	int i=0;
+	
+	for(i=0; i<nbObjets; i++)
+	{
+		collectionObjet.visite[i] = 0;
+	}
+}
+
+void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
+{
+	int i,j;
+	int SommePoids = 0;
 	for(i=0;i<nbObjets; i++) //copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
 		collectionObjet.noeud[i] = objet[i];
 		
-	printf("valeur de l'objet 1 %f ",collectionObjet.noeud[1].valeur);
+	initialiserTableau(collectionObjet, nbObjets);
+		
+	for(j=0;j<nbObjets;j++)
+	{
+		SommePoids += collectionObjet.noeud[i].poids;
+		if(SommePoids < poidMax)
+		{
+			//collectionObjet.visite[i]
+		}
+	}
 }
 
 int main(int argc, char * argv[])
@@ -180,7 +200,7 @@ int main(int argc, char * argv[])
 	
 	trieABulles(objet,nbObjets);
 	afficheDonnees(objet,nbObjets);
-	branchAndBound(collectionObjet, objet, nbObjets);
+	branchAndBound(collectionObjet, objet, nbObjets,poidMax);
 	
 	printf("Voici le poids max : %f\n",poidMax);
 	printf("Voici le nombre d'objet %d\n",nbObjets);
