@@ -1,4 +1,4 @@
-#include <stdio.h>
+
 #include <stdlib.h>
 #include <string.h>
 #include "sacADos.h"
@@ -197,7 +197,7 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 				printf("somme %.3f\n",SommePoids);
 				
 				collectionObjet.filsGauche = 2*j;
-				collectionObjet.filsDroit = (2*j)+1;
+				collectionObjet.filsDroit = (2*j)-1;
 				collectionObjet.choix[j] = 1;
 				collectionObjet.visite[collectionObjet.filsGauche] = 1;
 				collectionObjet.visite[collectionObjet.filsDroit] = 1;
@@ -212,7 +212,7 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 		printf("objet %d -> :%d \n",i,collectionObjet.choix[i]);
 		
 	}
-	
+
 	printf("\n");
 }
 
