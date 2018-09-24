@@ -25,6 +25,7 @@ void calculRate(Objet *objet, int nbObjets);
 void afficheDonnees(Objet *objet,int nbObjets);
 void quickSort(Objet *objet,int nbObjets);
 void trieABulles(Objet *objet, int nbObjets);
+void swap(Objet obj1, Objet obj2);
 //void initialiserTableau(Arbre collectionObjet, int nbObjets);
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax);
 

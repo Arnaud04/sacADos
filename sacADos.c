@@ -144,9 +144,10 @@ void trieABulles(Objet *objet, int nbObjets)
 			count ++;
 			if(objet[j].ratios > objet[j+1].ratios)
 			{
-				tmp = objet[j];
+				/*tmp = objet[j];
 				objet[j] = objet[j+1];
-				objet[j+1] = tmp;
+				objet[j+1] = tmp;*/
+				swap(objet[j],objet[j+1]);
 				
 			}
 
@@ -172,7 +173,8 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 {
 	int i,j;
 	double SommePoids = 0;
-	for(i=0;i<nbObjets; i++) //copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
+	//copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
+	for(i=0;i<nbObjets; i++) 
 		collectionObjet.noeud[i] = objet[i];
 		
 	//initialiserTableau a 0 les tableaux choix et visite
