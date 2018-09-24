@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "sacADos.h"
@@ -169,6 +169,7 @@ void initialiserTableau(Arbre collectionObjet, int nbObjets)
 	}
 }
 */
+
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
 {
 	int i,j;
@@ -187,23 +188,27 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 
 	//on met la première case à 1 pour pouvoir commencer l'ago
 	collectionObjet.visite[0] = 1;
-	
-	for(j=0;j<nbObjets;j++)
+
+	for(j=0;j<=nbObjets; j++)
 	{
+		collectionObjet.filsDroit = 2*j+2;
+		collectionObjet.filsGauche = 2*j+1;
+		
 		if(collectionObjet.visite[j] == 1)
 		{
 			SommePoids += collectionObjet.noeud[j].poids;
-			if(SommePoids < poidMax)
+
+			if(SommePoids < poidMax) 
 			{
 
 				printf("somme %.3f\n",SommePoids);
 				
-				collectionObjet.filsGauche = 2*j;
-				collectionObjet.filsDroit = (2*j)-1;
+
 				collectionObjet.choix[j] = 1;
-				collectionObjet.visite[collectionObjet.filsGauche] = 1;
+				//collectionObjet.visite[collectionObjet.filsGauche] = 1;
 				collectionObjet.visite[collectionObjet.filsDroit] = 1;
 			}
+
 			
 		}
 	}
