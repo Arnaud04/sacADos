@@ -145,10 +145,10 @@ void trieABulles(Objet *objet, int nbObjets)
 			count ++;
 			if(objet[j].ratios > objet[j+1].ratios)
 			{
-				/*tmp = objet[j];
+				tmp = objet[j];
 				objet[j] = objet[j+1];
-				objet[j+1] = tmp;*/
-				swap(objet[j],objet[j+1]);
+				objet[j+1] = tmp;
+				//swap(objet[j],objet[j+1]);
 				
 			}
 
@@ -200,7 +200,8 @@ int power(int number, int power)
 
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
 {
-	int i,j;
+	int i,j=0;
+	int end = 0;
 	double SommePoids = 0;
 	//copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
 	for(i=0;i<nbObjets; i++) 
@@ -218,41 +219,43 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 	collectionObjet.visite[0] = 1;
 
 	//========= descente Arbre ===============
-	
-	for(j=0;j<=nbObjets; j++)
+	while (end != 1)
 	{
-		collectionObjet.filsDroit = 2*j+2;
-		collectionObjet.filsGauche = 2*j+1;
-		int i = 0;
-		/*if(collectionObjet.visite[j] == 1)
-		{
-			SommePoids += collectionObjet.noeud[j].poids;
 
-			if(SommePoids < poidMax) 
+			collectionObjet.filsDroit = 2*j+2;
+			collectionObjet.filsGauche = 2*j+1;
+			
+			printf("indice %d nbObjet %d",collectionObjet.filsGauche,nbObjets);
+			/*if(collectionObjet.filsGauche > nbObjets);
+				end = 1;*/
+			if((collectionObjet.visite[j] == 1) && (end != 1))
 			{
+				SommePoids += collectionObjet.noeud[j].poids;
+				printf("SommePoids %f,poidMax %f",SommePoids,poidMax);
+				if(SommePoids <= poidMax) 
+				{
 
-				printf("somme %.3f\n",SommePoids);
-				
+					printf("somme %.3f noeud %d\n",SommePoids,j);
+					
 
-				collectionObjet.choix[j] = 1;
-				//collectionObjet.visite[collectionObjet.filsGauche] = 1;
-				collectionObjet.visite[collectionObjet.filsDroit] = 1;
+						//collectionObjet.choix[j] = 1;
+						collectionObjet.visite[collectionObjet.filsGauche] = 1;
+						//collectionObjet.visite[collectionObjet.filsDroit] = 1;
+				}
+
 			}
-
-		}*/
-		printf("nbop %d\nn", power(2,nbObjets));
-		while(i < power(2,nbObjets))
-		{
-			//printf("%d ",i);
-			i++;
-		}
+			if(j==20)
+				end = 1;
+				
+			j++;
+	
 		
 	}
 	
 	
 	for(i=0; i<nbObjets;i++)
 	{
-		printf("objet %d -> :%d \n",i,collectionObjet.choix[i]);
+		printf("objet %d -> :%d \n",i,collectionObjet.visite[i]);
 		
 	}
 
