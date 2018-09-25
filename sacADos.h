@@ -27,6 +27,7 @@ void quickSort(Objet *objet,int nbObjets);
 void trieABulles(Objet *objet, int nbObjets);
 void swap(Objet obj1, Objet obj2);
 //void initialiserTableau(Arbre collectionObjet, int nbObjets);
+void arrayCpy(Arbre obj1,int size);
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax);
 
 #endif  

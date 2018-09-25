@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "sacADos.h"
 
 int isPair(int number)
@@ -170,6 +171,33 @@ void initialiserTableau(Arbre collectionObjet, int nbObjets)
 }
 */
 
+void arrayCpy(Arbre obj1,int size)
+{
+	int i=0;
+
+	for(i = 0; i <size; i++)
+	{
+		obj1.choix[i] = obj1.visite[i];
+		
+		printf("%d ",obj1.choix[i]);
+	}
+}
+
+int power(int number, int power)
+{
+	int resultat = number;
+	int i=0;
+	
+	if(power == 0)
+		resultat = 1;
+	else
+	{
+		for(i=0;i<power-1;i++)
+			resultat = resultat * number;
+	}
+	return resultat;
+}
+
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
 {
 	int i,j;
@@ -189,12 +217,14 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 	//on met la première case à 1 pour pouvoir commencer l'ago
 	collectionObjet.visite[0] = 1;
 
+	//========= descente Arbre ===============
+	
 	for(j=0;j<=nbObjets; j++)
 	{
 		collectionObjet.filsDroit = 2*j+2;
 		collectionObjet.filsGauche = 2*j+1;
-		
-		if(collectionObjet.visite[j] == 1)
+		int i = 0;
+		/*if(collectionObjet.visite[j] == 1)
 		{
 			SommePoids += collectionObjet.noeud[j].poids;
 
@@ -209,11 +239,17 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 				collectionObjet.visite[collectionObjet.filsDroit] = 1;
 			}
 
-			
+		}*/
+		printf("nbop %d\nn", power(2,nbObjets));
+		while(i < power(2,nbObjets))
+		{
+			//printf("%d ",i);
+			i++;
 		}
+		
 	}
 	
-		
+	
 	for(i=0; i<nbObjets;i++)
 	{
 		printf("objet %d -> :%d \n",i,collectionObjet.choix[i]);
@@ -223,7 +259,7 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 	printf("\n");
 }
 
-int main(int argc, char * argv[])
+int main()
 {
 	Objet objet[SIZE];
 	Arbre collectionObjet;
