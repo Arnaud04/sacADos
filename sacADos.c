@@ -198,10 +198,83 @@ int power(int number, int power)
 	return resultat;
 }
 
+void descenteArbre(int side, Arbre *collectionObjet, double nbObjets,double *SommePoids,int j,double poidMax)
+{
+	int end = 0;
+	
+	collectionObjet->filsDroit = 2*j+2;
+	collectionObjet->filsGauche = 2*j+1;
+			
+	//desecente fils gauche
+	if((end != 1) && (side == 0))
+	{
+	
+			if(collectionObjet->filsGauche > nbObjets) //si on est au niveau des fils
+				end = 1;
+			if((collectionObjet->visite[j] == 1) && (end != 1))
+			{
+				
+				*SommePoids += collectionObjet->noeud[j].poids;
+	
+				if(*SommePoids <= poidMax) 
+				{
+
+					//collectionObjet.choix[j] = 1;
+					collectionObjet->visite[collectionObjet->filsGauche] = 1;
+					
+					printf("%d ",collectionObjet->visite[collectionObjet->filsGauche]);
+					//collectionObjet.visite[collectionObjet.filsDroit] = 1;
+				}
+
+			}
+				
+			j++;
+	}
+	//Descente fils droit 
+	else if((end !=1 )&&(side == 1))
+	{
+		if(collectionObjet->filsDroit > nbObjets) //si on est au niveau des feuille (fin de l'arbre)
+				end = 1;
+			if((collectionObjet->visite[j] == 1) && (end != 1))
+			{
+				
+				*SommePoids += collectionObjet->noeud[j].poids;
+	
+				if(*SommePoids <= poidMax) 
+				{
+
+					collectionObjet->visite[collectionObjet->filsDroit] = 1;
+				}
+
+			}
+				
+			j++;
+	}
+	//descente fils droit
+}
+
+void remonteeArbre(int side, Arbre *collectionObjet,double *SommePoids,int j)
+{
+
+	if(side == 0) //fils gauche
+	{
+		//collectionObjet->pere = j/2;
+		collectionObjet->visite[collectionObjet->filsGauche] = 2; //on supprime le fils droit 
+		*SommePoids -= collectionObjet->noeud[collectionObjet->filsGauche].poids;
+	}
+	else 
+	{
+		//collectionObjet->pere = j/2-1;
+		collectionObjet->visite[collectionObjet->filsDroit] = 2; //on supprime le fils gauche
+		*SommePoids -= collectionObjet ->noeud[collectionObjet->filsDroit].poids;
+	}
+}
+
+
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
 {
 	int i,j=0;
-	int end = 0;
+	int fils = 0; //0 left 1 right
 	double SommePoids = 0;
 	//copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
 	for(i=0;i<nbObjets; i++) 
@@ -217,43 +290,18 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 
 	//on met la première case à 1 pour pouvoir commencer l'ago
 	collectionObjet.visite[0] = 1;
-
-	//========= descente Arbre ===============
-	while (end != 1)
+	
+	//========= descente fils gauche Arbre ===============
+	fils = 1; 
+	for(j=0; j<15; j++)
 	{
-
-			collectionObjet.filsDroit = 2*j+2;
-			collectionObjet.filsGauche = 2*j+1;
-			
-			printf("indice %d nbObjet %d",collectionObjet.filsGauche,nbObjets);
-			/*if(collectionObjet.filsGauche > nbObjets);
-				end = 1;*/
-			if((collectionObjet.visite[j] == 1) && (end != 1))
-			{
-				SommePoids += collectionObjet.noeud[j].poids;
-				printf("SommePoids %f,poidMax %f",SommePoids,poidMax);
-				if(SommePoids <= poidMax) 
-				{
-
-					printf("somme %.3f noeud %d\n",SommePoids,j);
-					
-
-						//collectionObjet.choix[j] = 1;
-						collectionObjet.visite[collectionObjet.filsGauche] = 1;
-						//collectionObjet.visite[collectionObjet.filsDroit] = 1;
-				}
-
-			}
-			if(j==20)
-				end = 1;
-				
-			j++;
-	
-		
+		descenteArbre(fils,&collectionObjet,nbObjets,&SommePoids,j,poidMax);
+		printf("poid avant remonte  %f\n",SommePoids);
 	}
-	
-	
-	for(i=0; i<nbObjets;i++)
+	remonteeArbre(fils,&collectionObjet,&SommePoids,7);
+	printf("poid apres remonte  %f\n",SommePoids);
+	//test(&collectionObjet, nbObjets);
+	for(i=1; i < nbObjets; i++)
 	{
 		printf("objet %d -> :%d \n",i,collectionObjet.visite[i]);
 		

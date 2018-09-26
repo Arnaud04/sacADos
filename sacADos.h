@@ -15,6 +15,7 @@ struct Arbre{
 	Objet noeud[SIZE];
 	int visite[SIZE];
 	int choix[SIZE];
+	int pere;
 	int filsGauche;
 	int filsDroit;
 };
@@ -29,5 +30,6 @@ void swap(Objet obj1, Objet obj2);
 //void initialiserTableau(Arbre collectionObjet, int nbObjets);
 void arrayCpy(Arbre obj1,int size);
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax);
-
+void descenteArbre(int side, Arbre *collectionObjet, double nbObjets,double *SommePoids,int j,double poidMax);
+void test(Arbre *collectionObjet, int nbObjets);
 #endif  
