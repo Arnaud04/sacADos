@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "sacADos.h"
+#include "branchAndBound.h"
 
 int isPair(int number)
 {
@@ -15,63 +15,6 @@ int isPair(int number)
 	return resultat; //1 si il est pair 0 sinon 
 }
 
-void lectureFichier(Objet *objet, double *poidMax,int *nbObjets)
-{
-	
-	FILE *fichier = NULL;
-	fichier = fopen("sac.txt","r+");
-	
-	if (fichier == NULL)
-	{
-		perror("fopen");
-		exit(1);
-	}
-	
-	char tmp[SIZE];
-	fgets(tmp,LINE,fichier);
-	*poidMax = strtod(tmp,NULL);
-	
-	int currentChar = 0;
-	
-	int indice = 0;
-	double number = 0;
-	int colonne = 0;
-	int line = 0;
-	
-	while(currentChar != EOF)
-	{
-		currentChar = fgetc(fichier);
-		if((currentChar != ' ') && (currentChar != '\n')) //lecture [a-z,A-Z,1-9]
-		{
-			tmp[indice] = currentChar;
-			indice ++;
-		}
-		
-		else 
-		{
-			tmp[indice] = '\0';
-			number = strtod(tmp,NULL);
-			
-			indice = 0;
-			colonne ++;
-			
-			if(isPair(colonne))
-			{
-					objet[line].valeur = number;
-			}
-			else
-			{
-					objet[line].poids = number;		
-			}
-
-			if(currentChar == '\n')
-				line ++;
-			
-		}
-	}
-		
-	*nbObjets = line;
-}
 
 void calculRate(Objet *objet, int nbObjets)
 {
@@ -137,7 +80,6 @@ void swap(Objet *obj1, Objet *obj2)
 void trieABulles(Objet *objet, int nbObjets)
 {
 	int i,j,k=nbObjets-1;
-	Objet tmp;
 	
 	for(i=0; i<nbObjets-1; i++)
 	{
@@ -150,18 +92,18 @@ void trieABulles(Objet *objet, int nbObjets)
 	}
 
 }
-/*
-void initialiserTableau(Arbre collectionObjet, int nbObjets)
+
+void initialiserTableau(Arbre *collectionObjet, int nbObjets)
 {
 	int i=0;
 	
 	for(i=0; i<nbObjets; i++)
 	{
-		collectionObjet.choix[i] = 0;
-		collectionObjet.visite[i] = 0;
+		collectionObjet->choix[i] = 0;
+		collectionObjet->visite[i] = 0;
 	}
 }
-*/
+
 
 void arrayCpy(Arbre *obj1,int size)
 {
@@ -195,7 +137,7 @@ void descenteArbre(int fg,int fd,int side, Arbre *collectionObjet, double nbObje
 	int end = 0;
 	
 	//desecente fils gauche
-	if((end != 1) && (side == 0))
+	if(side == 0)
 	{
 			
 			if((fg) > nbObjets-1) //si on est au niveau des fils
@@ -216,7 +158,7 @@ void descenteArbre(int fg,int fd,int side, Arbre *collectionObjet, double nbObje
 
 	}
 	//Descente fils droit 
-	else if((end !=1 )&&(side == 1))
+	else
 	{
 		if(fd > nbObjets-1) //si on est au niveau des feuille (fin de l'arbre)
 				end = 1;
@@ -245,7 +187,7 @@ void remonteeArbre(Arbre *collectionObjet,double *SommePoids,int *j)
 			*j = (*j/2);
 		else
 			*j = ((*j/2) -1);
-			*SommePoids -= collectionObjet->noeud[*j].poids;
+		*SommePoids -= collectionObjet->noeud[*j].poids;
 }
 
 void afficheObjet(Arbre *collectionObjet, int nbObjets)
@@ -265,19 +207,13 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 {
 	int i,j=0;
 	int fils = 0; //0 left 1 right
-	double poidsOptimal = 0;
 	double SommePoids = 0;
 	//copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
 	for(i=0;i<nbObjets; i++) 
 		collectionObjet.noeud[i] = objet[i];
 		
 	//initialiserTableau a 0 les tableaux choix et visite
-	
-	for(i=0; i<nbObjets; i++)
-	{
-		collectionObjet.choix[i] = 0;
-		collectionObjet.visite[i] = 0;
-	}
+	initialiserTableau(&collectionObjet,nbObjets);
 
 	//on met la première case à 1 pour pouvoir commencer l'ago ajouter teste poid
 	collectionObjet.visite[0] = 1;
@@ -285,7 +221,6 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 	fils = 0; 
 	//SommePoids = collectionObjet.noeud[0].poids;
 	double tmpPoids = 0;
-	int k;
 	
 	//======================================== Algo Branch and bound =========================================
 	while(collectionObjet.visite[0]!=2)
@@ -319,15 +254,7 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 			remonteeArbre(&collectionObjet,&SommePoids,&j);
 
 		}
-				printf("La somme des poids est %f\n",SommePoids+collectionObjet.noeud[j].poids);
-				
-		printf("tableau de visite \n");
-		
-		for(i=0; i < nbObjets; i++)
-		{
-			printf("%d ",collectionObjet.visite[i]);	
-		}
-		printf("\n");
+		printf("La somme des poids est %f\n",SommePoids+collectionObjet.noeud[j].poids);			
 	}
 	
 	afficheObjet(&collectionObjet,nbObjets);
@@ -336,24 +263,3 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 
 }
 
-int main()
-{
-	Objet objet[SIZE];
-	Arbre collectionObjet;
-	
-	double poidMax = 0;
-	int nbObjets = 0;
-	
-	lectureFichier(objet,&poidMax,&nbObjets);
-	
-	calculRate(objet,nbObjets);
-	
-	trieABulles(objet,nbObjets);
-	afficheDonnees(objet,nbObjets);
-	branchAndBound(collectionObjet, objet, nbObjets,poidMax);
-	
-	printf("Voici le poids max : %f\n",poidMax);
-	printf("Voici le nombre d'objet %d\n",nbObjets);
-
-	return 0;
-}
