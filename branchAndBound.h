@@ -31,7 +31,7 @@ void arrayCpy(Arbre *obj1,int size);
 int power(int number, int power);
 void descenteArbre(int fg,int fd,int side, Arbre *collectionObjet, double nbObjets,double *SommePoids,int *j,double poidMax);
 void remonteeArbre(Arbre *collectionObjet,double *SommePoids,int *j);
-void afficheObjet(Arbre *collectionObjet, int nbObjets);
+void afficheObjetSaisie(Arbre *collectionObjet, int nbObjets,double *tmpPoids);
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax);
 
 

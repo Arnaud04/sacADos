@@ -5,6 +5,29 @@
 #include "branchAndBound.h"
 #include "lecture.h"
 
+int getObjectNumber()
+{
+	FILE *fichier = NULL;
+	fichier = fopen("sac.txt","r+");
+	
+	if (fichier == NULL)
+	{
+		perror("fopen");
+		exit(1);
+	}
+	int currentChar=0;
+	int nbLigne=0;
+	while((currentChar = fgetc(fichier)) != EOF)
+	{
+		if(currentChar == '\n')
+			nbLigne++;
+	}
+	
+	fclose(fichier);
+	
+	return nbLigne-1;
+}
+
 void lectureFichier(Objet *objet, double *poidMax)
 {
 	
@@ -63,29 +86,6 @@ void lectureFichier(Objet *objet, double *poidMax)
 	fclose(fichier);
 }
 
-int getObjectNumber()
-{
-	FILE *fichier = NULL;
-	fichier = fopen("sac.txt","r+");
-	
-	if (fichier == NULL)
-	{
-		perror("fopen");
-		exit(1);
-	}
-	int currentChar=0;
-	int nbLigne=0;
-	while((currentChar = fgetc(fichier)) != EOF)
-	{
-		if(currentChar == '\n')
-			nbLigne++;
-	}
-	
-	fclose(fichier);
-	
-	return nbLigne-1;
-}
-
 int main()
 {
 	
@@ -94,14 +94,14 @@ int main()
 	double poidMax = 0;
 	int nbObjets = getObjectNumber();
 	
-	//==Allocation Dynamique==
+	//==Allocation Dynamique (récupération du nombre total d'objets à voler ==
 	
 	Objet *objet =NULL;
 	objet = malloc(nbObjets * sizeof(Objet));
 	if(objet == NULL)
 		exit(0);
 		
-	//========================
+	//=========================================================================
 	
 	lectureFichier(objet,&poidMax);
 

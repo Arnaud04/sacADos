@@ -112,8 +112,6 @@ void arrayCpy(Arbre *obj1,int size)
 	for(i = 0; i <size; i++)
 	{
 		obj1->choix[i] = obj1->visite[i];
-		
-		printf("%d ",obj1->choix[i]);
 	}
 }
 
@@ -140,21 +138,21 @@ void descenteArbre(int fg,int fd,int side, Arbre *collectionObjet, double nbObje
 	if(side == 0)
 	{
 			
-			if((fg) > nbObjets-1) //si on est au niveau des fils
-				end = 1;
-			if((collectionObjet->visite[*j] == 1) && (end != 1))
-			{
-				
-				*SommePoids += collectionObjet->noeud[*j].poids;
-	
-				if(*SommePoids <= poidMax) 
-				{
-					*j = collectionObjet->filsGauche; //on met a jour l'indice j
-					collectionObjet->visite[fg] = 1;
-					
-				}
+		if((fg) > nbObjets-1) //si on est au niveau des fils
+			end = 1;
+		if((collectionObjet->visite[*j] == 1) && (end != 1))
+		{
+			
+			*SommePoids += collectionObjet->noeud[*j].poids;
 
+			if(*SommePoids <= poidMax) 
+			{
+				*j = collectionObjet->filsGauche; //on met a jour l'indice j
+				collectionObjet->visite[fg] = 1;
+				
 			}
+
+		}
 
 	}
 	//Descente fils droit 
@@ -162,18 +160,18 @@ void descenteArbre(int fg,int fd,int side, Arbre *collectionObjet, double nbObje
 	{
 		if(fd > nbObjets-1) //si on est au niveau des feuille (fin de l'arbre)
 				end = 1;
-			if((collectionObjet->visite[*j] == 1) && (end != 1))
-			{
-				
-				*SommePoids += collectionObjet->noeud[*j].poids;
-	
-				if(*SommePoids <= poidMax) 
-				{
-					*j = collectionObjet->filsDroit;
-					collectionObjet->visite[fd] = 1;
-				}
+		if((collectionObjet->visite[*j] == 1) && (end != 1))
+		{
+			
+			*SommePoids += collectionObjet->noeud[*j].poids;
 
+			if(*SommePoids <= poidMax) 
+			{
+				*j = collectionObjet->filsDroit;
+				collectionObjet->visite[fd] = 1;
 			}
+
+		}
 
 	}
 
@@ -190,17 +188,22 @@ void remonteeArbre(Arbre *collectionObjet,double *SommePoids,int *j)
 		*SommePoids -= collectionObjet->noeud[*j].poids;
 }
 
-void afficheObjet(Arbre *collectionObjet, int nbObjets)
+void afficheObjetSaisie(Arbre *collectionObjet, int nbObjets,double *tmpPoids)
 {
 	int i=0;
-	
-	printf("liste d'objet saisie\n");
+	int j=1;
+	printf("================== liste d'objet saisie ==================\n\n");
 	for(i=0;i<nbObjets;i++)
 	{
 		if(collectionObjet->choix[i] == 1)
-			printf("objet %d -> poids %f",i,collectionObjet->noeud[i].poids);
+		{
+			printf("%d) objet %d -> poids %f -> valeur %f\n",j,i,collectionObjet->noeud[i].poids,collectionObjet->noeud[i].valeur);
+			j++;
+		}
 	}
-	
+	printf("\n");
+	printf("Le poids max d'objet que nous avons saisie est :  %f\n",*tmpPoids);
+	printf("==========================================================\n\n");
 }
 
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
@@ -208,42 +211,45 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 	int i,j=0;
 	int fils = 0; //0 left 1 right
 	double SommePoids = 0;
-	//copie du tableau d'objet dans le tableau de noeud de ma collection d'objet
+	double tmpPoids = 0;
+	
+	//========= Allocation Dynamique ===========
+	
+		/*collectionObjet.noeud = NULL;
+		collectionObjet.noeud = malloc(nbObjets * sizeof(Arbre));
+		if(objet == NULL)
+			exit(0);*/
+		
+	//=========================================
+	
+	//On créer une collectionObjet comprenend les élément de Objet
 	for(i=0;i<nbObjets; i++) 
 		collectionObjet.noeud[i] = objet[i];
 		
-	//initialiserTableau a 0 les tableaux choix et visite
+	//On initialise nos tableau choix et visite
 	initialiserTableau(&collectionObjet,nbObjets);
 
-	//on met la première case à 1 pour pouvoir commencer l'ago ajouter teste poid
+	//on met la première case à 1 pour pouvoir commencer l'ago 
 	collectionObjet.visite[0] = 1;
 	
-	fils = 0; 
-	//SommePoids = collectionObjet.noeud[0].poids;
-	double tmpPoids = 0;
-	
 	//======================================== Algo Branch and bound =========================================
+	
 	while(collectionObjet.visite[0]!=2)
 	{
 		collectionObjet.filsDroit = 2*j+2;
 		collectionObjet.filsGauche = 2*j+1;
 		
-		//savoir quel coté de l'arbre empréter pour descendre
+		//On choisit le coté de l'arbre que l'on souhaite visiter
 		if((collectionObjet.visite[collectionObjet.filsGauche]==2) && (collectionObjet.visite[collectionObjet.filsDroit] !=2))
 			fils = 1;
 		if((collectionObjet.visite[collectionObjet.filsGauche]!=2) && (collectionObjet.visite[collectionObjet.filsDroit] ==2))
 			fils = 0;
 
-	
 		if(((collectionObjet.visite[collectionObjet.filsGauche] != 2)||(collectionObjet.visite[collectionObjet.filsDroit] != 2))&&((collectionObjet.filsGauche)<=nbObjets-1))
-		{
 			descenteArbre(collectionObjet.filsGauche,collectionObjet.filsDroit,fils,&collectionObjet,nbObjets,&SommePoids,&j,poidMax);
-			//tmpPoids = collectionObjet.noeud[j].poids;
+			
 
-
-		}
-
-		//si on est au niveau des feuille ou que les fils on déja été visité alors on remonte
+		//si on est au niveau des feuille ou que les fils on déja été visités alors on remonte dans l'arbre
 		if(((collectionObjet.visite[collectionObjet.filsGauche] == 2)&&(collectionObjet.visite[collectionObjet.filsDroit] == 2))||((collectionObjet.filsGauche)>=nbObjets-1))
 		{
 			if((SommePoids+collectionObjet.noeud[j].poids) > (tmpPoids))
@@ -257,9 +263,8 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 		printf("La somme des poids est %f\n",SommePoids+collectionObjet.noeud[j].poids);			
 	}
 	
-	afficheObjet(&collectionObjet,nbObjets);
-	printf("Le poids max d'objet que nous avons saisie est :  %f\n",tmpPoids);
+	afficheObjetSaisie(&collectionObjet,nbObjets,&tmpPoids);
+	
 	//=========================================Fin algo ==========================================
 
 }
-
