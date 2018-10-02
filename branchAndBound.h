@@ -1,6 +1,5 @@
 #ifndef BRANCHANDBOUND_H
 #define BRANCHANDBOUND_H
-#define SIZE 15
 #define LINE 250
 
 typedef struct Objet Objet;

@@ -100,44 +100,41 @@ void descenteArbre(int fg,int fd,int side, Arbre *collectionObjet, double nbObje
 {
 	int end = 0;
 	
-	//desecente fils gauche
-	if(side == 0)
+	
+	switch(side)
 	{
-			
-		if((fg) > nbObjets-1) //si on est au niveau des fils
-			end = 1;
-		if((collectionObjet->visite[*j] == 1) && (end != 1))
-		{
-			
-			*SommePoids += collectionObjet->noeud[*j].poids;
-
-			if(*SommePoids <= poidMax) 
-			{
-				*j = collectionObjet->filsGauche; //on met a jour l'indice j
-				collectionObjet->visite[fg] = 1;
-				
-			}
-
-		}
-
-	}
-	//Descente fils droit 
-	else
-	{
-		if(fd > nbObjets-1) //si on est au niveau des feuille (fin de l'arbre)
+		case 0: //desecente fils gauche
+			if((fg) > nbObjets-1) //si on est au niveau des fils
 				end = 1;
-		if((collectionObjet->visite[*j] == 1) && (end != 1))
-		{
-			*SommePoids += collectionObjet->noeud[*j].poids;
-
-			if(*SommePoids <= poidMax) 
+			if((collectionObjet->visite[*j] == 1) && (end != 1))
 			{
-				*j = collectionObjet->filsDroit;
-				collectionObjet->visite[fd] = 1;
+				
+				*SommePoids += collectionObjet->noeud[*j].poids;
+
+				if(*SommePoids <= poidMax) 
+				{
+					*j = collectionObjet->filsGauche; //on met a jour l'indice j
+					collectionObjet->visite[fg] = 1;
+					
+				}
+
 			}
+		break;
+		case 1: 	//Descente fils droit 
+			if(fd > nbObjets-1) //si on est au niveau des feuille (fin de l'arbre)
+				end = 1;
+			if((collectionObjet->visite[*j] == 1) && (end != 1))
+			{
+				*SommePoids += collectionObjet->noeud[*j].poids;
 
-		}
+				if(*SommePoids <= poidMax) 
+				{
+					*j = collectionObjet->filsDroit;
+					collectionObjet->visite[fd] = 1;
+				}
 
+			}
+		break;
 	}
 
 }
