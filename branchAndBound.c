@@ -35,38 +35,6 @@ void afficheDonnees(Objet *objet,int nbObjets)
 	printf("\n");
 }
 
-//QuickSort ne fonctionne pas encore
-/* 
-void quickSort(Objet *objet,int nbObjets)
-{
-	int mur,courant;
-	double pivot;
-	Objet tmp;
-	
-	if(nbObjets < 2)
-		return;
-	pivot = objet[nbObjets - 1].ratios;
-	mur = courant = 0;
-	while (courant < nbObjets)
-	{
-		if(objet[courant].ratios <= pivot)
-		{
-			if(mur != courant)
-			{
-				tmp = objet[courant];
-				objet[courant] = objet[mur];
-				objet[mur] = tmp;
-			}
-			mur ++;
-		}
-		courant ++;
-	}
-	quickSort(objet,mur-1);
-	quickSort(objet+mur-1, nbObjets - mur +1);
-	
-	
-}*/ 
-
 void swap(Objet *obj1, Objet *obj2)
 {
 		Objet tmp;
@@ -185,10 +153,38 @@ void remonteeArbre(Arbre *collectionObjet,double *SommePoids,int *j)
 		*SommePoids -= collectionObjet->noeud[*j].poids;
 }
 
-void afficheObjetSaisie(Arbre *collectionObjet, int nbObjets,double *tmpPoids)
+void ecritureFichier(Arbre *collectionObjet,int nbObjets,double tmpPoids,double SommeValeur,double poidMax)
 {
 	int i=0;
 	int j=1;
+	
+	FILE* fichier = NULL;
+	fichier = fopen("resultat.txt","w+");//mode ecriture avec suppression au prealable du contenu 
+	
+	if(fichier == NULL){ perror("fichier");exit(1);}
+	
+	fprintf(fichier,"========= Algorithme de Branch and Bound =========\n\n\n");
+	
+	fprintf(fichier,"====Solution Optimale====\n\n");
+	for(i=0;i<nbObjets;i++)
+	{
+		if(collectionObjet->choix[i] == 1)
+		{
+			fprintf(fichier,"%d) objet %d -> poids %f -> valeur %f\n",j,i,collectionObjet->noeud[i].poids,collectionObjet->noeud[i].valeur);
+			j++;
+		}
+	}
+	fprintf(fichier,"Le poids total max d'objet que nous avons saisie est :  %f\n",tmpPoids);
+	fprintf(fichier,"La valeur total maximum d'objet que nous avons saisie est : %f sur un total de %f\n",SommeValeur,poidMax);
+	fclose(fichier);
+}
+
+void afficheObjetSaisie(Arbre *collectionObjet, int nbObjets,double *tmpPoids,double poidMax)
+{
+	int i=0;
+	int j=1;
+	double SommeValeur = 0;
+	
 	printf("================== liste d'objet saisie ==================\n\n");
 	for(i=0;i<nbObjets;i++)
 	{
@@ -196,20 +192,22 @@ void afficheObjetSaisie(Arbre *collectionObjet, int nbObjets,double *tmpPoids)
 		{
 			printf("%d) objet %d -> poids %f -> valeur %f\n",j,i,collectionObjet->noeud[i].poids,collectionObjet->noeud[i].valeur);
 			j++;
+			SommeValeur += collectionObjet->noeud[i].valeur;
 		}
 	}
 	printf("\n");
-	printf("Le poids max d'objet que nous avons saisie est :  %f\n",*tmpPoids);
+	printf("Le poids total max d'objet que nous avons saisie est :  %f\n",*tmpPoids);
+	printf("La valeur total maximum d'objet que nous avons saisie est : %f sur un total de %f\n",SommeValeur,poidMax);
 	printf("==========================================================\n\n");
+	ecritureFichier(collectionObjet,nbObjets,*tmpPoids,SommeValeur,poidMax);
 }
 
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
 {
 	int i,j=0;
 	int fils = 0; //0:fils_gauche 1:fils_droit
-	double SommePoids = 0;
 	double tmpPoids = 0;
-	double SommeValeur = 0;
+	double SommePoids = 0;
 
 	//=========================================
 	
@@ -250,11 +248,10 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 			}
 			remonteeArbre(&collectionObjet,&SommePoids,&j);
 
-		}
-		printf("La somme des poids est %f\n",SommePoids+collectionObjet.noeud[j].poids);			
+		}		
 	}
 	
-	afficheObjetSaisie(&collectionObjet,nbObjets,&tmpPoids);
+	afficheObjetSaisie(&collectionObjet,nbObjets,&tmpPoids,poidMax);
 	
 	//========================================= Fin algo ==========================================
 	//Liberation de la memoire

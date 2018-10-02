@@ -5,14 +5,14 @@ EXEC = sacADos
 
 all: $(EXEC)
 
-sacADos: branchAndBound.o lecture.o
-	$(CC) -o sacADos branchAndBound.o lecture.o $(LDFLAGS)
+sacADos: branchAndBound.o fichier.o
+	$(CC) -o sacADos branchAndBound.o fichier.o $(LDFLAGS)
 
 branchAndBound.o: branchAndBound.c
 	$(CC) -o branchAndBound.o -c branchAndBound.c $(CFLAGS)
 
-lecture.o: lecture.c branchAndBound.h
-	$(CC) -o lecture.o -c lecture.c $(CFLAGS)
+fichier.o: fichier.c branchAndBound.h
+	$(CC) -o fichier.o -c fichier.c $(CFLAGS)
 
 clean:
 	rm -rf *.o

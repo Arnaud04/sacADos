@@ -1,0 +1,11 @@
+========= Algorithme de Branch and Bound =========
+
+
+====Solution Optimale====
+
+1) objet 0 -> poids 231.000000 -> valeur 25.000000
+2) objet 1 -> poids 112.000000 -> valeur 12.000000
+3) objet 3 -> poids 222.000000 -> valeur 23.000000
+4) objet 7 -> poids 302.000000 -> valeur 29.000000
+Le poids total max d'objet que nous avons saisie est :  867.000000
+La valeur total maximum d'objet que nous avons saisie est : 89.000000 sur un total de 1000.000000

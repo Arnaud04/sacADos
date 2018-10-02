@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include "branchAndBound.h"
-#include "lecture.h"
+#include "fichier.h"
 
 int getObjectNumber()
 {
@@ -104,7 +104,6 @@ int main()
 		exit(0);
 		
 	//=========================================================================
-	
 	//=======Allocation dynamique de CollectionObjets =========================
 	
 	collectionObjet.noeud = NULL;
@@ -129,7 +128,7 @@ int main()
 	
 	
 	lectureFichier(objet,&poidMax);
-	printf("Voici le poids max d'objet que l'on peu prendre : %f\n",poidMax);
+	
 	calculRate(objet,nbObjets);
 	
 	trieABulles(objet,nbObjets);
