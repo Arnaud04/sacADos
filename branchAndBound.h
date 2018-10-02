@@ -12,9 +12,9 @@ struct Objet{
 
 typedef struct Arbre Arbre;
 struct Arbre{
-	Objet noeud[SIZE];
-	int visite[SIZE];
-	int choix[SIZE];
+	Objet *noeud;
+	int *visite;
+	int *choix;
 	int pere;
 	int filsGauche;
 	int filsDroit;

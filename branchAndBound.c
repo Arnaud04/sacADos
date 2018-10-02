@@ -15,7 +15,6 @@ int isPair(int number)
 	return resultat; //1 si il est pair 0 sinon 
 }
 
-
 void calculRate(Objet *objet, int nbObjets)
 {
 	int i;
@@ -104,7 +103,6 @@ void initialiserTableau(Arbre *collectionObjet, int nbObjets)
 	}
 }
 
-
 void arrayCpy(Arbre *obj1,int size)
 {
 	int i=0;
@@ -162,7 +160,6 @@ void descenteArbre(int fg,int fd,int side, Arbre *collectionObjet, double nbObje
 				end = 1;
 		if((collectionObjet->visite[*j] == 1) && (end != 1))
 		{
-			
 			*SommePoids += collectionObjet->noeud[*j].poids;
 
 			if(*SommePoids <= poidMax) 
@@ -209,17 +206,11 @@ void afficheObjetSaisie(Arbre *collectionObjet, int nbObjets,double *tmpPoids)
 void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poidMax)
 {
 	int i,j=0;
-	int fils = 0; //0 left 1 right
+	int fils = 0; //0:fils_gauche 1:fils_droit
 	double SommePoids = 0;
 	double tmpPoids = 0;
-	
-	//========= Allocation Dynamique ===========
-	
-		/*collectionObjet.noeud = NULL;
-		collectionObjet.noeud = malloc(nbObjets * sizeof(Arbre));
-		if(objet == NULL)
-			exit(0);*/
-		
+	double SommeValeur = 0;
+
 	//=========================================
 	
 	//On créer une collectionObjet comprenend les élément de Objet
@@ -265,6 +256,9 @@ void branchAndBound(Arbre collectionObjet, Objet *objet,int nbObjets,double poid
 	
 	afficheObjetSaisie(&collectionObjet,nbObjets,&tmpPoids);
 	
-	//=========================================Fin algo ==========================================
-
+	//========================================= Fin algo ==========================================
+	//Liberation de la memoire
+	free(collectionObjet.noeud); 
+	free(collectionObjet.visite);
+	free(collectionObjet.choix);
 }

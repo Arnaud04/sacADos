@@ -40,7 +40,7 @@ void lectureFichier(Objet *objet, double *poidMax)
 		exit(1);
 	}
 	
-	char tmp[SIZE];
+	char tmp[LINE];
 	fgets(tmp,LINE,fichier);
 	*poidMax = strtod(tmp,NULL);
 	
@@ -93,29 +93,52 @@ int main()
 	
 	double poidMax = 0;
 	int nbObjets = getObjectNumber();
+
+	printf("Voici le nombre d'objet %d\n",nbObjets);
 	
-	//==Allocation Dynamique (récupération du nombre total d'objets à voler ==
+	//====== Allocation Dynamique (récupération du nombre total d'objets à voler) ======
 	
-	Objet *objet =NULL;
+	Objet *objet = NULL;
 	objet = malloc(nbObjets * sizeof(Objet));
 	if(objet == NULL)
 		exit(0);
 		
 	//=========================================================================
 	
-	lectureFichier(objet,&poidMax);
+	//=======Allocation dynamique de CollectionObjets =========================
+	
+	collectionObjet.noeud = NULL;
+	collectionObjet.noeud = malloc(nbObjets * sizeof(Objet));
+	if(collectionObjet.noeud == NULL)
+		exit(0);
+	//==========================================================================
+	//============Allocation dynamique des tableau visite et choix =============
+		
+	collectionObjet.visite = NULL;
+	collectionObjet.visite = malloc(nbObjets * sizeof(int));
+	if(collectionObjet.visite == NULL)
+		exit(0);
+			
+	collectionObjet.choix = NULL;
+	collectionObjet.choix = malloc(nbObjets * sizeof(int));
+	if(collectionObjet.choix == NULL)
+		exit(0);
+	
+	//==========================================================================
 
+	
+	
+	lectureFichier(objet,&poidMax);
+	printf("Voici le poids max d'objet que l'on peu prendre : %f\n",poidMax);
 	calculRate(objet,nbObjets);
 	
 	trieABulles(objet,nbObjets);
 	
 	afficheDonnees(objet,nbObjets);
-	
+
 	branchAndBound(collectionObjet, objet, nbObjets,poidMax);
 	
-	printf("Voici le poids max d'objet que l'on peu prendre : %f\n",poidMax);
+	free(objet);
 	
-	printf("Voici le nombre d'objet %d\n",nbObjets);
-
 	return 0;
 }
